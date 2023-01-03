@@ -93,7 +93,7 @@ describe("ArrayList", () => {
   });
   describe("iterator protocol", () => {
     it("should be usable in for...of loops", () => {
-      const al = new ArrayList(10);
+      const al = new ArrayList<number>(10);
       const values = [1, 2];
       values.forEach((val) => {
         al.push(val);

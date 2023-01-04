@@ -91,6 +91,101 @@ describe("ArrayList", () => {
       expect(() => al.get(-1)).toThrow();
     });
   });
+  describe("at", () => {
+    it("should allow array access.", () => {
+      const al = new ArrayList(3);
+
+      al.push(1);
+      expect(al.at(0)).toBe(1);
+      al.push(4);
+      expect(al.at(1)).toBe(4);
+    });
+
+    it("should allow negative index access", () => {
+      const al = new ArrayList(3);
+
+      al.push(1);
+      al.push(4);
+      expect(al.at(-1)).toBe(4);
+    });
+
+    it("should handle decimals", () => {
+      const al = new ArrayList(3);
+
+      al.push(1);
+      al.push(4);
+
+      expect(al.at(2.0)).toBe(undefined);
+      expect(al.at(0.5)).toBe(1);
+      expect(al.at(1.5)).toBe(4);
+    });
+  });
+
+  describe("concat", () => {
+    it("should concat two arrays", () => {
+      const al = new ArrayList<number>(3);
+      al.push(1);
+      al.push(4);
+
+      const al2 = new ArrayList<number>(3);
+      al2.push(2);
+      al2.push(5);
+
+      const al3 = al.concat(al2);
+      expect(al3.length).toBe(4);
+      expect(al3.at(0)).toBe(1);
+      expect(al3.at(1)).toBe(4);
+      expect(al3.at(2)).toBe(2);
+      expect(al3.at(3)).toBe(5);
+    });
+
+    it("should not change the existing arrays", () => {
+      const al = new ArrayList<number>(3);
+      al.push(1);
+      al.push(4);
+
+      const al2 = new ArrayList<number>(3);
+      al2.push(2);
+      al2.push(5);
+
+      const al3 = al.concat(al2);
+      expect(al3).not.toBe(al);
+      expect(al.length).toBe(2);
+      expect(al.at(0)).toBe(1);
+      expect(al.at(1)).toBe(4);
+      expect(al2.length).toBe(2);
+      expect(al2.at(0)).toBe(2);
+      expect(al2.at(1)).toBe(5);
+      expect(al3.length).toBe(4);
+    });
+
+    it("should take one or more arrays as arguments", () => {
+      const al = new ArrayList<number>(3);
+      al.push(1);
+      al.push(4);
+
+      const al2 = new ArrayList<number>(3);
+      al2.push(2);
+      al2.push(5);
+
+      const al3 = new ArrayList<number>(3);
+      al3.push(4);
+
+      const al4 = al.concat(al2, al3);
+
+      expect(al4.length).toBe(5);
+      expect(al4.at(0)).toBe(1);
+      expect(al4.at(1)).toBe(4);
+      expect(al4.at(2)).toBe(2);
+      expect(al4.at(3)).toBe(5);
+      expect(al4.at(4)).toBe(4);
+    });
+  });
+
+  describe("clear #java AL", () => {});
+
+  describe("sort", () => {});
+
   describe("iterator protocol", () => {
     it("should be usable in for...of loops", () => {
       const al = new ArrayList<number>(10);

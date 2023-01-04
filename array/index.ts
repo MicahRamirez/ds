@@ -1,3 +1,6 @@
+/**
+ * NONSPARSE!
+ */
 class ArrayList<T> implements Iterable<T> {
   private capacity: number;
   private size: number;
@@ -101,7 +104,8 @@ class ArrayList<T> implements Iterable<T> {
   }
 
   /**
-   * merge two or more arrays. This method does not change the existing arrays, but instead returns a new array.
+   * Arrays and/or values to concatenate into a new array.
+   * If all valueN parameters are omitted, concat returns a shallow copy of the existing array on which it is called
    */
   concat(...arrays: ArrayList<T>[]): ArrayList<T> {
     const nextArrayList = new ArrayList<T>();

@@ -153,10 +153,10 @@ class ArrayList<T> implements Iterable<T> {
    * Array Iterator
    * iterable iterator object that yields the value of each index in the array.
    */
-  entries(): Iterator<[number, T], any, undefined> {
+  entries(): IterableIterator<[number, T]> {
     let index = 0;
     const container = this.container;
-    return {
+    const iterator = {
       next() {
         const iteratorResult: { done: boolean; value: [number, T] } = {
           done: index === container.length,
@@ -164,6 +164,12 @@ class ArrayList<T> implements Iterable<T> {
         };
         index += 1;
         return iteratorResult;
+      },
+    };
+    return {
+      ...iterator,
+      [Symbol.iterator](): IterableIterator<[number, T]> {
+        return this;
       },
     };
   }

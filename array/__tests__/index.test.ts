@@ -243,6 +243,24 @@ describe("ArrayList", () => {
         index += 1;
       }
     });
+    it("should be iterable", () => {
+      const al = new ArrayList();
+      const itemsToPush = ["a", "b", "c"];
+      itemsToPush.forEach((val) => al.push(val));
+      const it = al.entries();
+
+      expect(it[Symbol.iterator]() === it); // true
+    });
+
+    it("should be usable in for...of loops", () => {
+      const al = new ArrayList();
+      const itemsToPush = ["a", "b", "c"];
+      itemsToPush.forEach((val) => al.push(val));
+
+      for (let [index, value] of al.entries()) {
+        expect(value).toBe(itemsToPush[index]);
+      }
+    });
   });
 
   describe("clear #java AL", () => {});

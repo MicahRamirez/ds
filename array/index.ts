@@ -149,6 +149,25 @@ class ArrayList<T> implements Iterable<T> {
     }
   }
 
+  /**
+   * Array Iterator
+   * iterable iterator object that yields the value of each index in the array.
+   */
+  entries(): Iterator<[number, T], any, undefined> {
+    let index = 0;
+    const container = this.container;
+    return {
+      next() {
+        const iteratorResult: { done: boolean; value: [number, T] } = {
+          done: index === container.length,
+          value: [index, container[index]],
+        };
+        index += 1;
+        return iteratorResult;
+      },
+    };
+  }
+
   get(index: number) {
     this._checkIndexValidity(index);
     return this.container[index];

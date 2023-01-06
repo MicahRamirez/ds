@@ -226,6 +226,25 @@ describe("ArrayList", () => {
     });
   });
 
+  describe("entries", () => {
+    it("should return an iterable with index in index zero and value in index one", () => {
+      const al = new ArrayList();
+      const itemsToPush = ["a", "b", "c"];
+      itemsToPush.forEach((val) => al.push(val));
+
+      const iterator = al.entries();
+
+      let it = iterator.next();
+      let index = 0;
+      while (!it.done) {
+        expect(index).toBe(it.value[0]);
+        expect(itemsToPush[index]).toBe(it.value[1]);
+        it = iterator.next();
+        index += 1;
+      }
+    });
+  });
+
   describe("clear #java AL", () => {});
 
   describe("sort", () => {});

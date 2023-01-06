@@ -182,6 +182,50 @@ describe("ArrayList", () => {
     });
   });
 
+  describe("copyWithin", () => {
+    it("should take a single argument as a target and copy the array from target", () => {
+      const al = new ArrayList<number>(3);
+      al.push(1);
+      al.push(2);
+      al.push(3);
+      al.push(4);
+
+      al.copyWithin(2);
+
+      expect(al.length).toBe(4);
+      expect(al.at(0)).toBe(1);
+      expect(al.at(1)).toBe(2);
+      expect(al.at(2)).toBe(1);
+      expect(al.at(3)).toBe(2);
+    });
+
+    it("should take a target,start arguments and copy elements in place from the start at target", () => {
+      const al = new ArrayList<string>();
+      ["a", "b", "c", "d", "e"].forEach((val) => al.push(val));
+
+      al.copyWithin(1, 3);
+
+      const expected = ["a", "d", "c", "d", "e"];
+      expect(al.length).toBe(5);
+      expected.forEach((val, index) => {
+        expect(al.at(index)).toBe(val);
+      });
+    });
+
+    it("should take target,start,end arguments and copy elements in place from start inclusive to end exclusive starting from target", () => {
+      const al = new ArrayList<string>();
+      ["a", "b", "c", "d", "e"].forEach((val) => al.push(val));
+
+      al.copyWithin(0, 2, 4);
+
+      const expected = ["c", "d", "c", "d", "e"];
+      expect(al.length).toBe(5);
+      expected.forEach((val, index) => {
+        expect(al.at(index)).toBe(val);
+      });
+    });
+  });
+
   describe("clear #java AL", () => {});
 
   describe("sort", () => {});

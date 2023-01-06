@@ -73,16 +73,20 @@ class ArrayList<T> implements Iterable<T> {
   }
 
   /**
-   *
    * @param index negative index
    * @returns positive index
    */
   private convertNegativeToPositiveIndex(index: number) {
-    if (index > 0) {
-      throw RangeError("Index must be negative");
-    }
     const positiveIndex = this.size + index;
-    return positiveIndex;
+    return index < 0 ? positiveIndex : index;
+  }
+
+  private sanitizeIndexToInteger(num: number) {
+    return Math.trunc(num);
+  }
+
+  private sanitizeIndexesToInteger(...indexes: Array<number>) {
+    return indexes.map((index) => this.sanitizeIndexToInteger(index));
   }
 
   /**
@@ -94,7 +98,7 @@ class ArrayList<T> implements Iterable<T> {
    * Always returns undefined if index < -array.length or index >= array.length without attempting to access the corresponding property.
    */
   at(index: number) {
-    const i = Math.trunc(index);
+    const i = this.sanitizeIndexToInteger(index);
     const normalizedIndex = i < 0 ? this.convertNegativeToPositiveIndex(i) : i;
     if (normalizedIndex >= this.size) {
       return undefined;
@@ -123,7 +127,27 @@ class ArrayList<T> implements Iterable<T> {
   /**
    * method shallow copies part of an array to another location in the same array and returns it without modifying its length.
    */
-  copyWithin() {}
+  copyWithin(
+    targetIndexParam: number,
+    startParam = 0,
+    endParam = this.length - 1,
+  ) {
+    // TODO: both index sanitization and conversion should be encapsulated better
+    const integerIndexes = this.sanitizeIndexesToInteger(
+      targetIndexParam,
+      startParam,
+      endParam,
+    );
+    const [targetIndex, start, end] = integerIndexes.map((index) =>
+      this.convertNegativeToPositiveIndex(index),
+    );
+
+    let sequenceStart = targetIndex;
+    for (let i = start; i < end; i++) {
+      this.container[sequenceStart] = this.container[i];
+      sequenceStart += 1;
+    }
+  }
 
   get(index: number) {
     this._checkIndexValidity(index);

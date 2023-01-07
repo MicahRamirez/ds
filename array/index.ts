@@ -174,6 +174,19 @@ class ArrayList<T> implements Iterable<T> {
     };
   }
 
+  every(
+    callback: (value: T, index: number, array: ArrayList<T>) => boolean,
+  ): boolean {
+    const length = this.length;
+    for (let i = 0; i < length; i++) {
+      const callbackResult = callback(this.container[i], i, this);
+      if (!callbackResult) {
+        return false;
+      }
+    }
+    return true;
+  }
+
   get(index: number) {
     this._checkIndexValidity(index);
     return this.container[index];

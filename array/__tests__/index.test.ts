@@ -262,6 +262,43 @@ describe("ArrayList", () => {
       }
     });
   });
+  describe("every", () => {
+    it("should return true if all elements pass the test", () => {
+      const al = new ArrayList();
+      const itemsToPush = [1, 2, 3];
+      itemsToPush.forEach((val) => al.push(val));
+
+      const result = al.every((val) => val < 4);
+      expect(result).toBe(true);
+    });
+
+    it("should return false if one element does not pass the test", () => {
+      const al = new ArrayList();
+      const itemsToPush = [1, 2, 3];
+      itemsToPush.forEach((val) => al.push(val));
+
+      let iterCount = 0;
+      const result = al.every((val) => {
+        iterCount += 1;
+        return val > 4;
+      });
+      expect(result).toBe(false);
+      // test fail fast
+      expect(iterCount).toBe(1);
+    });
+
+    it("should not visit array elements added during the evaluation of every", () => {
+      const al = new ArrayList();
+      const itemsToPush = [1, 2, 3];
+      itemsToPush.forEach((val) => al.push(val));
+
+      const result = al.every((val, _i, arrayList) => {
+        arrayList.push(4);
+        return val < 4;
+      });
+      expect(result).toBe(true);
+    });
+  });
 
   describe("clear #java AL", () => {});
 

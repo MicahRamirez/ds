@@ -316,7 +316,16 @@ describe("ArrayList", () => {
     });
   });
 
-  describe("filter", () => {});
+  describe("filter", () => {
+    it("should filter elements that pass the test", () => {
+      const al = new ArrayList(10);
+      al.push(...[1, 2, 3, 4, 5]);
+      const next = al.filter((val) => val > 4);
+
+      expect(next.length).toBe(1);
+      expect(next.at(0)).toBe(5);
+    });
+  });
 
   describe("clear #java AL", () => {});
 

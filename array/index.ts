@@ -203,7 +203,19 @@ class ArrayList<T> implements Iterable<T> {
   /**
    * filter(element, index, array)
    */
-  filter() {}
+  filter(
+    callbackFunction: (element: T, index: number, arrayList: this) => boolean,
+  ) {
+    const thisArray = this;
+    const thisLength = thisArray.length;
+    const nextArrayList = new ArrayList(this.length);
+    for (let i = 0; i < thisLength; i++) {
+      if (callbackFunction(this.container[i], i, this)) {
+        nextArrayList.push(this.container[i]);
+      }
+    }
+    return nextArrayList;
+  }
 
   get(index: number) {
     this._checkIndexValidity(index);

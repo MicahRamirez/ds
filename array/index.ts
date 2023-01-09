@@ -187,6 +187,24 @@ class ArrayList<T> implements Iterable<T> {
     return true;
   }
 
+  /**
+   * fill(value)
+   * fill(value, start)
+   * fill(value, start, end)
+   * @returns {this}
+   */
+  fill(value: T, start = 0, end = this.length - 1): this {
+    for (let i = start; i < end; i++) {
+      this.container[i] = value;
+    }
+    return this;
+  }
+
+  /**
+   * filter(element, index, array)
+   */
+  filter() {}
+
   get(index: number) {
     this._checkIndexValidity(index);
     return this.container[index];
@@ -197,13 +215,18 @@ class ArrayList<T> implements Iterable<T> {
     this.container[index] = value;
   }
 
-  push(value: T) {
-    if (this.capacity === 0 || this.size === this.capacity) {
-      const nextCapacity = this.capacity === 0 ? 1 : this.capacity * 2;
-      this._resize(nextCapacity);
+  push(...values: T[]) {
+    const itemsToPush = values.length;
+    let pushIndex = 0;
+    while (pushIndex < itemsToPush) {
+      if (this.capacity === 0 || this.size === this.capacity) {
+        const nextCapacity = this.capacity === 0 ? 1 : this.capacity * 2;
+        this._resize(nextCapacity);
+      }
+      this.container[this.size] = values[pushIndex];
+      pushIndex += 1;
+      this.size += 1;
     }
-    this.container[this.size] = value;
-    this.size += 1;
   }
 
   _capacity() {

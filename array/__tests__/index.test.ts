@@ -52,6 +52,13 @@ describe("ArrayList", () => {
         expect(al._capacity()).toBe(expectedCapacity);
       });
     });
+
+    it("should allow pushing of N elements", () => {
+      const elementsToPush = ["a", "b", "c", "d", "e"];
+      const al = new ArrayList<string>();
+
+      al.push(...elementsToPush);
+    });
   });
 
   describe("set", () => {
@@ -299,6 +306,17 @@ describe("ArrayList", () => {
       expect(result).toBe(true);
     });
   });
+
+  describe("fill", () => {
+    it("should fill will value", () => {
+      const al = new ArrayList(10);
+      const expected = "ay";
+
+      al.fill(expected);
+    });
+  });
+
+  describe("filter", () => {});
 
   describe("clear #java AL", () => {});
 

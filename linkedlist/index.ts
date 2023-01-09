@@ -33,7 +33,24 @@ class LinkedList<T> implements Iterable<T> {
     this.length += 1;
   }
 
-  addAtIndex(index: number, value: T) {}
+  addAtIndex(index: number, value: T) {
+    if (index > this.size() || index < 0) {
+      throw new RangeError("Index out of bounds.");
+    }
+    let precedingIndex = index - 1;
+    let currentIndex = 0;
+    let it = this.head;
+    while (currentIndex <= precedingIndex) {
+      it = it.next;
+      currentIndex += 1;
+    }
+    const nodeAfterNew = it.next;
+    it.next = new Node(value, nodeAfterNew);
+    this.length += 1;
+    if (nodeAfterNew === null) {
+      this.tail = it.next;
+    }
+  }
 
   addAll(ll: LinkedList<T>) {}
 
@@ -63,29 +80,38 @@ class LinkedList<T> implements Iterable<T> {
     return this.length;
   }
 
+  toArray(): Array<T> {
+    const array = [];
+    let it = this.head.next;
+    while (it !== null) {
+      array.push(it.value);
+      it = it.next;
+    }
+    return array;
+  }
+
   #insertIndexRecur(index: number, value: T) {}
 
   #insertIndexIter(index: number, value: T) {}
-  [Symbol.iterator]() {
+  iterator(): IterableIterator<T> {
     const length = this.length;
     let it = this.head;
-    // TODO: What is the expectation on LL iterator with zero length. A little confused with this implementation
-    // because it immediately iterates with value done true and value of
-    // cases length 0
-    // h -> dummy -/>
-    // t -> dummy -/>
-
     return {
       next() {
         it = it.next;
         const isDone = length === 0 || it === null;
-
         return {
           done: isDone,
           value: it?.value,
         };
       },
+      [Symbol.iterator]() {
+        return this;
+      },
     };
+  }
+  [Symbol.iterator](): IterableIterator<T> {
+    return this.iterator();
   }
 }
 

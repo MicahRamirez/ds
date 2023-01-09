@@ -46,15 +46,56 @@ describe("LinkedList", () => {
 
     it("should add multiple values to the end of the list", () => {
       const ll = new LinkedList();
-      ll.add(1);
-      ll.add(2);
-      ll.add(3);
+      const valuesToAdd = [1, 2, 3];
+      valuesToAdd.forEach((val) => ll.add(val));
 
       expect(ll.size()).toBe(3);
+      const llIterator = ll.iterator();
+      let it = llIterator.next();
       let index = 0;
-      const head = ll.getHead();
+      while (!it.done) {
+        expect(it.value).toBe(valuesToAdd[index]);
+        index += 1;
+        it = llIterator.next();
+      }
+      // terminates on 3
+      expect(index).toBe(3);
     });
   });
 
-  describe("addAtIndex", () => {});
+  describe("addAtIndex", () => {
+    it("should throw a RangeError if adding at an index that is out of bounds", () => {
+      const ll = new LinkedList();
+
+      expect(() => ll.addAtIndex(1, "ay")).toThrowError(RangeError);
+    });
+
+    it("should not throw a range error when adding at the zero index of an empty ll", () => {
+      const ll = new LinkedList();
+
+      expect(() => ll.addAtIndex(0, "ay")).not.toThrowError(RangeError);
+      expect(ll.size()).toBe(1);
+      expect(ll.getTail().value).toEqual("ay");
+    });
+
+    it("should add at some middle index", () => {
+      const ll = new LinkedList();
+      ll.add("ay");
+      ll.add("yo");
+      ll.addAtIndex(1, "sup");
+
+      expect(ll.size()).toBe(3);
+      expect(ll.toArray()).toEqual(["ay", "sup", "yo"]);
+    });
+  });
+
+  describe("toArray", () => {
+    it("should transform the ll to an array", () => {
+      const ll = new LinkedList();
+      const numbers = [1, 2, 3];
+      numbers.forEach((val) => ll.add(val));
+
+      expect(ll.toArray()).toEqual(numbers);
+    });
+  });
 });

@@ -33,6 +33,11 @@ class LinkedList<T> implements Iterable<T> {
     this.length += 1;
   }
 
+  /**
+   *  O(N)
+   * @param index index to insert at
+   * @param value value to insert
+   */
   addAtIndex(index: number, value: T) {
     if (index > this.size() || index < 0) {
       throw new RangeError("Index out of bounds.");
@@ -54,14 +59,19 @@ class LinkedList<T> implements Iterable<T> {
 
   addAll(ll: LinkedList<T>) {}
 
-  addFirst(value: T) {}
+  addFirst(value: T) {
+    this.addAtIndex(0, value);
+  }
 
-  addLast(value: T) {}
+  addLast(value: T) {
+    this.addAtIndex(this.length, value);
+  }
 
   get(index: number) {}
 
   getHead(): Node<T> {
-    return this.head;
+    // head is a sentinel which is an implementation detail that should not be exposed!
+    return this.head.next;
   }
 
   getTail(): Node<T> {

@@ -40,7 +40,7 @@ describe("LinkedList", () => {
       ll.add(1);
 
       expect(ll.size()).toBe(1);
-      expect(ll.getHead().next.value).toBe(1);
+      expect(ll.getHead().value).toBe(1);
       expect(ll.getTail().value).toBe(1);
     });
 
@@ -86,6 +86,44 @@ describe("LinkedList", () => {
 
       expect(ll.size()).toBe(3);
       expect(ll.toArray()).toEqual(["ay", "sup", "yo"]);
+    });
+  });
+
+  describe("addFirst", () => {
+    it("should addFirst to an empty ll", () => {
+      const ll = new LinkedList();
+      ll.addFirst(1);
+
+      expect(ll.getHead().value).toEqual(1);
+      expect(ll.getHead().value).toEqual(ll.getTail().value);
+    });
+
+    it("should addFirst to a ll with one or more nodes and updates the head", () => {
+      const ll = new LinkedList();
+      ll.add(1);
+      ll.addFirst(2);
+
+      expect(ll.getHead().value).toEqual(2);
+    });
+  });
+
+  describe("addLast", () => {
+    it("should addLast to an empty ll", () => {
+      const ll = new LinkedList();
+      ll.addLast(1);
+
+      expect(ll.size()).toBe(1);
+      expect(ll.getHead().value).toBe(1);
+      expect(ll.getTail().value).toBe(1);
+    });
+
+    it("should addLast to an array with one or more nodes and update the tail", () => {
+      const ll = new LinkedList();
+      ll.addLast(1);
+      ll.addLast(2);
+
+      expect(ll.size()).toBe(2);
+      expect(ll.getTail().value).toBe(2);
     });
   });
 

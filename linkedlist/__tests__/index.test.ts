@@ -127,6 +127,30 @@ describe("LinkedList", () => {
     });
   });
 
+  describe("removeIndex", () => {
+    it("should remove the node at some internal index", () => {
+      const ll = new LinkedList();
+      ll.add(1);
+      ll.add(2);
+      ll.add(3);
+      expect(ll.removeIndex(1)).toEqual(2);
+      expect(ll.size()).toEqual(2);
+    });
+
+    it("should remove nodes correctly at terminal indexes", () => {
+      const ll = new LinkedList();
+      ll.add(1);
+      ll.add(2);
+      expect(ll.removeIndex(1)).toEqual(2);
+      expect(ll.getTail().value).toEqual(1);
+      expect(ll.size()).toEqual(1);
+
+      expect(ll.removeIndex(0)).toEqual(1);
+      expect(ll.size()).toEqual(0);
+      expect(ll.getTail()).toEqual(ll.getHead());
+    });
+  });
+
   describe("toArray", () => {
     it("should transform the ll to an array", () => {
       const ll = new LinkedList();

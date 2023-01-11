@@ -60,16 +60,40 @@ class LinkedList<T> implements Iterable<T> {
   }
 
   getTail(): Node<T> {
-    // when these
     if (this.head === this.tail) {
       return this.getHead();
     }
     return this.tail;
   }
 
-  removeFirst(): T {}
+  removeValue(value: T): T {}
 
-  removeLast(): T {}
+  removeIndex(index: number): T {
+    const normalizedIndex = this.#indexRangeCheck(index);
+    const precedingIndex = normalizedIndex - 1;
+    return this.#removeRecurHelper(this.head, precedingIndex);
+  }
+
+  #removeRecurHelper(node: Node<T>, index: number) {
+    if (index < 0) {
+      const nodeToDelete = node.next;
+      if (nodeToDelete === this.tail) {
+        this.tail = node;
+      }
+      node.next = nodeToDelete.next;
+      this.length -= 1;
+      return nodeToDelete.value;
+    }
+    return this.#removeRecurHelper(node.next, index - 1);
+  }
+
+  removeFirst(): T {
+    return this.removeIndex(0);
+  }
+
+  removeLast(): T {
+    return this.removeIndex(this.size() - 1);
+  }
 
   removeFirstOccurrence(): T {}
 

@@ -39,22 +39,7 @@ class LinkedList<T> implements Iterable<T> {
    * @param value value to insert
    */
   addAtIndex(index: number, value: T) {
-    if (index > this.size() || index < 0) {
-      throw new RangeError("Index out of bounds.");
-    }
-    let precedingIndex = index - 1;
-    let currentIndex = 0;
-    let it = this.head;
-    while (currentIndex <= precedingIndex) {
-      it = it.next;
-      currentIndex += 1;
-    }
-    const nodeAfterNew = it.next;
-    it.next = new Node(value, nodeAfterNew);
-    this.length += 1;
-    if (nodeAfterNew === null) {
-      this.tail = it.next;
-    }
+    this.#insertIndexRecur(index, value);
   }
 
   addAll(ll: LinkedList<T>) {}
@@ -75,6 +60,10 @@ class LinkedList<T> implements Iterable<T> {
   }
 
   getTail(): Node<T> {
+    // when these
+    if (this.head === this.tail) {
+      return this.getHead();
+    }
     return this.tail;
   }
 
@@ -100,9 +89,56 @@ class LinkedList<T> implements Iterable<T> {
     return array;
   }
 
-  #insertIndexRecur(index: number, value: T) {}
+  #indexRangeCheck(index: number) {
+    const normalizedIndex = Math.trunc(index);
+    if (normalizedIndex > this.size() || normalizedIndex < 0) {
+      throw new RangeError("Index out of bounds.");
+    }
+    return normalizedIndex;
+  }
+  /**
+   * TODO cleanup
+   * @param insertIndex
+   * @param node
+   * @param value
+   * @returns
+   */
+  #insertRecur(insertIndex: number, node: Node<T>, value: T): Node<T> {
+    if (insertIndex === 0) {
+      const newNode = new Node(value, node);
+      if (newNode.next === null) {
+        this.tail = newNode;
+      }
+      this.length += 1;
+      return newNode;
+    }
+    node.next = this.#insertRecur(insertIndex - 1, node.next, value);
+    return node;
+  }
 
-  #insertIndexIter(index: number, value: T) {}
+  #insertIndexRecur(indexParam: number, value: T) {
+    const index = this.#indexRangeCheck(indexParam);
+    this.head.next = this.#insertRecur(index, this.head.next, value);
+  }
+
+  #insertIndexIter(indexParam: number, value: T) {
+    const index = this.#indexRangeCheck(indexParam);
+
+    let precedingIndex = index - 1;
+    let currentIndex = 0;
+    let it = this.head;
+    while (currentIndex <= precedingIndex) {
+      it = it.next;
+      currentIndex += 1;
+    }
+    const nodeAfterNew = it.next;
+    it.next = new Node(value, nodeAfterNew);
+    this.length += 1;
+    if (nodeAfterNew === null) {
+      this.tail = it.next;
+    }
+  }
+
   iterator(): IterableIterator<T> {
     const length = this.length;
     let it = this.head;

@@ -6,8 +6,8 @@ describe("LinkedList", () => {
       const ll = new LinkedList();
 
       expect(ll.size()).toBe(0);
-      expect(ll.getHead().value).toBe(null);
-      expect(ll.getTail().value).toBe(null);
+      expect(ll.getHead()).toBe(null);
+      expect(ll.getTail()).toBe(null);
     });
   });
 

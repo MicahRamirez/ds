@@ -66,7 +66,31 @@ class LinkedList<T> implements Iterable<T> {
     return this.tail;
   }
 
-  removeValue(value: T): T {}
+  removeValue(value: T): boolean {
+    return this.#removeValueIterative(value);
+  }
+
+  #nodeDeletion(precedingNode, nodeToDelete): Node<T> {
+    if (nodeToDelete === this.tail) {
+      this.tail = precedingNode;
+    }
+    precedingNode.next = nodeToDelete.next;
+    this.length -= 1;
+    return nodeToDelete;
+  }
+
+  #removeValueIterative(value: T) {
+    let it = this.head.next;
+    let trailingNode = this.head;
+    while (it !== null) {
+      if (it.value === value) {
+        return Boolean(this.#nodeDeletion(trailingNode, it));
+      }
+      it = it.next;
+      trailingNode = trailingNode.next;
+    }
+    return false;
+  }
 
   removeIndex(index: number): T {
     const normalizedIndex = this.#indexRangeCheck(index);
@@ -77,12 +101,7 @@ class LinkedList<T> implements Iterable<T> {
   #removeRecurHelper(node: Node<T>, index: number) {
     if (index < 0) {
       const nodeToDelete = node.next;
-      if (nodeToDelete === this.tail) {
-        this.tail = node;
-      }
-      node.next = nodeToDelete.next;
-      this.length -= 1;
-      return nodeToDelete.value;
+      return this.#nodeDeletion(node, nodeToDelete).value;
     }
     return this.#removeRecurHelper(node.next, index - 1);
   }

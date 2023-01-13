@@ -151,6 +151,48 @@ describe("LinkedList", () => {
     });
   });
 
+  describe("removeValue", () => {
+    it("should return true if the value was removed", () => {
+      const ll = new LinkedList();
+      ll.add(1);
+      ll.add(2);
+
+      expect(ll.removeValue(2)).toEqual(true);
+      expect(ll.size()).toEqual(1);
+      expect(ll.toArray()).toEqual([1]);
+    });
+
+    it("should only remove the first occurrence", () => {
+      const ll = new LinkedList();
+      ll.add(1);
+      ll.add(1);
+
+      expect(ll.removeValue(1)).toEqual(true);
+      expect(ll.size()).toEqual(1);
+      expect(ll.toArray()).toEqual([1]);
+    });
+
+    it("should return false if it cant find an occurrence to remove", () => {
+      const ll = new LinkedList();
+      ll.add(1);
+      ll.add(1);
+
+      expect(ll.removeValue(0)).toEqual(false);
+      expect(ll.size()).toEqual(2);
+      expect(ll.toArray()).toEqual([1, 1]);
+    });
+
+    it("should support value removal of complex types", () => {
+      const ll = new LinkedList();
+      ll.add({ userId: 100 });
+      ll.add({ userId: 200 });
+
+      expect(ll.removeValue({ userId: 200 }));
+      expect(ll.size()).toEqual(1);
+      expect(ll.toArray()).toEqual([{ userId: 100 }]);
+    });
+  });
+
   describe("toArray", () => {
     it("should transform the ll to an array", () => {
       const ll = new LinkedList();

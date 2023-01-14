@@ -8,8 +8,7 @@ class Node<T> {
   }
 }
 
-// Access	Search	Insertion	Deletion
-// O(n)	O(n)	O(1)	O(n)
+type ComparatorResult = 0 | 1 | -1;
 /**
  * SinglyLinkedList
  */
@@ -17,10 +16,14 @@ class LinkedList<T> implements Iterable<T> {
   private head: Node<T>;
   private tail: Node<T>;
   public length: number = 0;
-  constructor() {
+
+  constructor(comparator?: (a: T, b: T) => ComparatorResult) {
     const headNode = new Node(null, null);
     this.head = headNode;
     this.tail = headNode;
+
+    // TODO: Implement Comparator Function as instance var and use for equality comparisons
+    // on any comparisons of T
   }
 
   /**
@@ -39,6 +42,8 @@ class LinkedList<T> implements Iterable<T> {
    * @param value value to insert
    */
   addAtIndex(index: number, value: T) {
+    // TODO: Add third optional param for choosing between iterative/recursive approach
+    // then add tests for both approaches
     this.#insertIndexRecur(index, value);
   }
 
@@ -52,6 +57,7 @@ class LinkedList<T> implements Iterable<T> {
     this.addAtIndex(this.length, value);
   }
 
+  // TODO
   get(index: number) {}
 
   getHead(): Node<T> {
@@ -78,6 +84,9 @@ class LinkedList<T> implements Iterable<T> {
     this.length -= 1;
     return nodeToDelete;
   }
+
+  // TODO
+  #removeValueRecursive(value: T) {}
 
   #removeValueIterative(value: T) {
     let it = this.head.next;
@@ -114,8 +123,7 @@ class LinkedList<T> implements Iterable<T> {
     return this.removeIndex(this.size() - 1);
   }
 
-  removeFirstOccurrence(): T {}
-
+  // TODO:
   set(index: number, value: T) {}
 
   size(): number {

@@ -54,4 +54,26 @@ describe("SimpleStack", () => {
       expect(removedItems).toEqual(items.reverse());
     });
   });
+
+  describe("search", () => {
+    it("should return -1 when the stack is empty", () => {
+      const stack = new Stack();
+
+      expect(stack.search(2)).toEqual(-1);
+    });
+    it("should return -1 when the item is not in the stack", () => {
+      const stack = new Stack();
+      stack.push(1);
+
+      expect(stack.search(2));
+    });
+
+    it("should return the distance from the top of the stack", () => {
+      const stack = new Stack();
+      stack.push(1);
+      stack.push(2);
+
+      expect(stack.search(1)).toEqual(2);
+    });
+  });
 });

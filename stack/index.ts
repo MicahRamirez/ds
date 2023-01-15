@@ -46,7 +46,16 @@ class SimpleStack<T> {
    * Bottommost item is at N
    * @param value
    */
-  search(value: T) {}
+  search(value: T) {
+    let i = this.size() - 1;
+    while (i >= 0) {
+      if (this.#container[i] === value) {
+        return this.size() - i;
+      }
+      i -= 1;
+    }
+    return -1;
+  }
 
   size(): number {
     return this.#length;

@@ -1,6 +1,7 @@
 import type { QueueOperations } from "./index";
 
 /**
+ * TODO: Maybe some more rigor with this analysis is required : )
  * implement queue with a stack
  * amortized dequeue operation O(1)
  * Reasoning:
@@ -12,7 +13,6 @@ import type { QueueOperations } from "./index";
  *  IF dequeue container is empty the the cost is the length enqueue container O(N)
  *  IF dequeue container is NOT empty, then the cost is O(1)
  */
-
 export default class QueueStack<T> implements QueueOperations<T> {
   #enqueueContainer: Array<T>;
   #dequeueContainer: Array<T>;
@@ -23,6 +23,7 @@ export default class QueueStack<T> implements QueueOperations<T> {
   }
 
   peek(): T {
+    // TODO: err this might be cheating as it isn't leveraging stack methods to solve the problem : |
     if (this.#dequeueContainer.length === 0) {
       return this.#enqueueContainer[0];
     }

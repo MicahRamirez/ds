@@ -1,13 +1,5 @@
 import LinkedList from "../linkedlist/index";
-
-interface QueueOperations<T> {
-  // O(1)
-  enqueue: (value: T) => void;
-  // O(1)
-  dequeue: () => T;
-  // O(1)
-  peek: () => T;
-}
+import type { QueueOperations } from "./index";
 
 export default class LinkedQueue<T> implements QueueOperations<T> {
   #container: LinkedList<T>;
@@ -22,6 +14,9 @@ export default class LinkedQueue<T> implements QueueOperations<T> {
   }
 
   dequeue(): T {
+    if (this.size() === 0) {
+      throw new RangeError("Queue is empty");
+    }
     const value = this.#container.removeFirst();
     this.#length -= 1;
     return value;

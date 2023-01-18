@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "types": [
-      "jest"
+      "jest",
     ],
     "lib": ["ESNext"],
     "target": "ES2015"

@@ -1,14 +1,7 @@
-class Node<T> {
-  public value: T;
-  public next: Node<T>;
+import Node from "./node";
 
-  constructor(value: T, next: Node<T> = null) {
-    this.value = value;
-    this.next = next;
-  }
-}
+import type { Comparator } from "../common";
 
-type ComparatorResult = 0 | 1 | -1;
 /**
  * SinglyLinkedList
  */
@@ -17,7 +10,7 @@ class LinkedList<T> implements Iterable<T> {
   private tail: Node<T>;
   public length: number = 0;
 
-  constructor(comparator?: (a: T, b: T) => ComparatorResult) {
+  constructor(comparator?: Comparator<T>) {
     const headNode = new Node(null, null);
     this.head = headNode;
     this.tail = headNode;

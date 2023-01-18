@@ -17,17 +17,33 @@ export default class QueueStack<T> implements QueueOperations<T> {
   #enqueueContainer: Array<T>;
   #dequeueContainer: Array<T>;
   #length: number = 0;
+
   constructor() {
     this.#dequeueContainer = [];
     this.#enqueueContainer = [];
   }
 
-  peek(): T {
-    // TODO: err this might be cheating as it isn't leveraging stack methods to solve the problem : |
-    if (this.#dequeueContainer.length === 0) {
-      return this.#enqueueContainer[0];
+  #checkAndFillDequeueContainer() {
+    if (this.#dequeueContainer.length > 0) {
+      return;
     }
-    return this.#dequeueContainer[0];
+    while (this.#enqueueContainer.length !== 0) {
+      this.#dequeueContainer.push(this.#enqueueContainer.pop());
+    }
+  }
+
+  #checkSizePrecondition() {
+    if (this.size() === 0) {
+      throw new RangeError("Queue is empty");
+    }
+  }
+
+  peek(): T {
+    this.#checkSizePrecondition();
+    this.#checkAndFillDequeueContainer();
+
+    // using js array as the stack which doesnt have a peek op
+    return this.#dequeueContainer[this.#dequeueContainer.length - 1];
   }
 
   enqueue(value: T) {
@@ -36,18 +52,11 @@ export default class QueueStack<T> implements QueueOperations<T> {
   }
 
   dequeue() {
-    if (this.size() === 0) {
-      throw new RangeError("Queue is empty");
-    }
-
+    this.#checkSizePrecondition();
+    this.#checkAndFillDequeueContainer();
+    const item = this.#dequeueContainer.pop();
     this.#length -= 1;
-    if (this.#dequeueContainer.length === 0) {
-      while (this.#enqueueContainer.length !== 0) {
-        this.#dequeueContainer.push(this.#enqueueContainer.pop());
-      }
-      return this.#dequeueContainer.pop();
-    }
-    return this.#dequeueContainer.pop();
+    return item;
   }
 
   size() {

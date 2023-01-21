@@ -9,6 +9,7 @@ class LinkedList<T> implements Iterable<T> {
   private head: Node<T>;
   private tail: Node<T>;
   public length: number = 0;
+  #comparator: Comparator<T>;
 
   constructor(comparator?: Comparator<T>) {
     const headNode = new Node(null, null);
@@ -17,6 +18,7 @@ class LinkedList<T> implements Iterable<T> {
 
     // TODO: Implement Comparator Function as instance var and use for equality comparisons
     // on any comparisons of T
+    this.#comparator = comparator;
   }
 
   /**
@@ -85,7 +87,9 @@ class LinkedList<T> implements Iterable<T> {
     let it = this.head.next;
     let trailingNode = this.head;
     while (it !== null) {
-      if (it.value === value) {
+      if (this.#comparator && this.#comparator(it.value, value) === 0) {
+        return Boolean(this.#nodeDeletion(trailingNode, it));
+      } else if (it.value === value) {
         return Boolean(this.#nodeDeletion(trailingNode, it));
       }
       it = it.next;

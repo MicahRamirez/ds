@@ -183,7 +183,15 @@ describe("LinkedList", () => {
     });
 
     it("should support value removal of complex types", () => {
-      const ll = new LinkedList();
+      const ll = new LinkedList<{ userId: number }>((userA, userB) => {
+        if (userA.userId === userB.userId) {
+          return 0;
+        } else if (userA.userId > userB.userId) {
+          return 1;
+        } else {
+          return -1;
+        }
+      });
       ll.add({ userId: 100 });
       ll.add({ userId: 200 });
 

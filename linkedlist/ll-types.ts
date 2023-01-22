@@ -7,4 +7,9 @@ export interface LinkedListOperations<T> {
   addFirst(value: T);
   addLast(value: T);
   getHead(): Node<T>;
+  getHead(): Node<T>;
+  removeValue(value: T): boolean;
+  removeIndex(index: number): T;
+  removeFirst(): T;
+  removeLast(): T;
 }

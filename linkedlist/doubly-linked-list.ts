@@ -9,43 +9,47 @@ export default class DoublyLinkedList<T> implements LinkedListOperations<T> {
   }
 
   add(value: T) {
-    if (this.#length === 0) {
-      const newNode = new DoublyLinkedNode(value, null, null);
+    if (this.size() === 0) {
+      const newNode = new DoublyLinkedNode(
+        value,
+        this.#sentinel,
+        this.#sentinel,
+      );
       this.#sentinel.next = newNode;
       this.#sentinel.prev = newNode;
     } else {
-      const newNode = new DoublyLinkedNode(value, null, this.#sentinel.prev);
+      const newNode = new DoublyLinkedNode(
+        value,
+        this.#sentinel,
+        this.#sentinel.prev,
+      );
       this.#sentinel.prev.next = newNode;
       this.#sentinel.prev = newNode;
     }
     this.#length += 1;
-    return;
   }
 
   #addAtIndexIter(index: number, value: T) {
-    let it = this.#sentinel.next;
-    let iterIndex = 0;
+    let it = this.#sentinel;
+    let iterIndex = -1;
     while (iterIndex !== index) {
       it = it.next;
       iterIndex += 1;
     }
 
-    // when inserting into an empty ll the prev value could be null
-    const newNode = new DoublyLinkedNode(value, it, it?.prev);
     if (this.#length === 0) {
+      const newNode = new DoublyLinkedNode(
+        value,
+        this.#sentinel,
+        this.#sentinel,
+      );
       this.#sentinel.next = newNode;
       this.#sentinel.prev = newNode;
-      this.#length += 1;
-      return;
-    } else if (index === 0) {
-      this.#sentinel.next = newNode;
-    } else if (index === this.#length) {
-      this.#sentinel.prev = newNode;
+    } else {
+      const newNode = new DoublyLinkedNode(value, it, it.prev);
+      it.prev.next = newNode;
+      it.prev = newNode;
     }
-
-    it.prev.next = newNode;
-    it.prev = newNode;
-
     this.#length += 1;
   }
 
@@ -86,7 +90,7 @@ export default class DoublyLinkedList<T> implements LinkedListOperations<T> {
   toArray() {
     let it = this.#sentinel.next;
     const items = [];
-    while (it !== null) {
+    while (it !== this.#sentinel) {
       items.push(it.value);
       it = it.next;
     }

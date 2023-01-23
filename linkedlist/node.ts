@@ -10,11 +10,16 @@ export default class Node<T> {
 
 export class DoublyLinkedNode<T> {
   public value: T;
-  public next: Node<T>;
-  public prev: Node<T>;
+  public next: DoublyLinkedNode<T>;
+  public prev: DoublyLinkedNode<T>;
 
-  constructor(value: T, next: Node<T> = null, prev: Node<T> = null) {
+  constructor(
+    value: T,
+    next: DoublyLinkedNode<T> = null,
+    prev: DoublyLinkedNode<T> = null,
+  ) {
     this.value = value;
     this.next = next;
+    this.prev = prev;
   }
 }

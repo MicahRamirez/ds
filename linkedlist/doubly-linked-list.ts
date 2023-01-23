@@ -22,11 +22,7 @@ export default class DoublyLinkedList<T> implements LinkedListOperations<T> {
     return;
   }
 
-  addAtIndex(index: number, value: T) {
-    if (index > this.#length) {
-      throw new RangeError("Index out of bounds.");
-    }
-    // TODO add optimization to start from closest side
+  #addAtIndexIter(index: number, value: T) {
     let it = this.#sentinel.next;
     let iterIndex = 0;
     while (iterIndex !== index) {
@@ -51,6 +47,25 @@ export default class DoublyLinkedList<T> implements LinkedListOperations<T> {
     it.prev = newNode;
 
     this.#length += 1;
+  }
+
+  addAtIndex(
+    index: number,
+    value: T,
+    options = { implementation: "iterative" },
+  ) {
+    if (index > this.#length) {
+      throw new RangeError("Index out of bounds.");
+    }
+    if (options.implementation === "recursive") {
+      // TODO: Implement recursive implementation
+    } else {
+      this.#addAtIndexIter(index, value);
+    }
+  }
+
+  removeValue(value: T) {
+    return true;
   }
 
   // addAtIndex(index: number, value: T): void;

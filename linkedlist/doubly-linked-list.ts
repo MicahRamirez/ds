@@ -68,6 +68,22 @@ export default class DoublyLinkedList<T> implements LinkedListOperations<T> {
     }
   }
 
+  getHead() {
+    return this.#sentinel.next;
+  }
+
+  getTail() {
+    return this.#sentinel.prev;
+  }
+
+  addFirst(value: T) {
+    this.addAtIndex(0, value);
+  }
+
+  addLast(value: T) {
+    this.addAtIndex(this.size(), value);
+  }
+
   removeValue(value: T) {
     return true;
   }

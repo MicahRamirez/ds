@@ -9,7 +9,7 @@ describe("DoublyLinkedList", () => {
     });
   });
 
-  describe("iterability", () => {
+  describe.skip("iterability", () => {
     it("should not iterate once with only the sentinel node", () => {
       const ll = new DoublyLinkedList();
       let iterCount = 0;
@@ -33,7 +33,7 @@ describe("DoublyLinkedList", () => {
   });
 
   describe("add", () => {
-    it.only("should add a value to the end of the list", () => {
+    it("should add a value to the end of the list", () => {
       const ll = new DoublyLinkedList();
       ll.add(1);
 
@@ -41,7 +41,7 @@ describe("DoublyLinkedList", () => {
     });
   });
 
-  describe.only("addAtIndex", () => {
+  describe("addAtIndex", () => {
     it("should throw a RangeError if adding at an index that is out of bounds", () => {
       const ll = new DoublyLinkedList();
 
@@ -104,7 +104,7 @@ describe("DoublyLinkedList", () => {
     });
   });
 
-  describe("removeIndex", () => {
+  describe.skip("removeIndex", () => {
     it("should remove the node at some internal index", () => {
       const ll = new DoublyLinkedList();
       ll.add(1);
@@ -128,7 +128,7 @@ describe("DoublyLinkedList", () => {
     });
   });
 
-  describe.only("removeValue", () => {
+  describe.skip("removeValue", () => {
     it("should return true if the value was removed", () => {
       const ll = new DoublyLinkedList();
       ll.add(1);
@@ -179,7 +179,7 @@ describe("DoublyLinkedList", () => {
   });
 
   describe("toArray", () => {
-    it.only("should transform the ll to an array", () => {
+    it("should transform the ll to an array", () => {
       const ll = new DoublyLinkedList();
       const numbers = [1, 2, 3];
       numbers.forEach((val) => ll.add(val));

@@ -1,11 +1,27 @@
 import { DoublyLinkedNode } from "./node";
 import type { LinkedListOperations } from "./ll-types";
+import type { Comparator } from "../common";
+
+type ImplementationOptions = {
+  implementation: "iterative" | "recursive";
+};
 
 export default class DoublyLinkedList<T> implements LinkedListOperations<T> {
   #sentinel: DoublyLinkedNode<T> = new DoublyLinkedNode(null, null, null);
   #length: number;
-  constructor() {
+  #comparator: Comparator<T>;
+  constructor(comparator?: Comparator<T>) {
     this.#length = 0;
+    if (comparator) {
+      this.#comparator = comparator;
+    }
+  }
+
+  #equals(itemA: T, itemB: T) {
+    if (this.#comparator) {
+      return this.#comparator(itemA, itemB) === 0;
+    }
+    return itemA === itemB;
   }
 
   add(value: T) {
@@ -84,16 +100,41 @@ export default class DoublyLinkedList<T> implements LinkedListOperations<T> {
     this.addAtIndex(this.size(), value);
   }
 
-  removeValue(value: T) {
-    return true;
+  removeValue(
+    value: T,
+    options: ImplementationOptions = { implementation: "recursive" },
+  ) {
+    if (options.implementation === "recursive") {
+      return this.#removeValueRecursive(value, this.#sentinel.next);
+    }
+    return false;
   }
 
-  // addAtIndex(index: number, value: T): void;
+  #removeValueRecursive(value: T, node: DoublyLinkedNode<T>) {
+    if (this.#equals(node.value, value)) {
+      // special case for when deleting a single item
+      if (node.prev === this.#sentinel && node.next === this.#sentinel) {
+        this.#sentinel.next = null;
+        this.#sentinel.prev = null;
+      } else {
+        node.prev.next = node.next;
+        node.next.prev = node.prev;
+      }
+
+      // clean up references
+      node.next = null;
+      node.prev = null;
+      this.#length -= 1;
+      return true;
+    }
+    // end of traversal
+    if (node.next === this.#sentinel) {
+      return false;
+    }
+    return this.#removeValueRecursive(value, node.next);
+  }
+
   // addAll(ll: this): void;
-  // addFirst(value: T);
-  // addLast(value: T);
-  // getHead(): Node<T>;
-  // getHead(): Node<T>;
   // removeValue(value: T): boolean;
   // removeIndex(index: number): T;
   // removeFirst(): T;

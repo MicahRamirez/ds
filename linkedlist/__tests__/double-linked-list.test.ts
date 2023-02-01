@@ -128,7 +128,7 @@ describe("DoublyLinkedList", () => {
     });
   });
 
-  describe.skip("removeValue", () => {
+  describe("removeValue", () => {
     it("should return true if the value was removed", () => {
       const ll = new DoublyLinkedList();
       ll.add(1);

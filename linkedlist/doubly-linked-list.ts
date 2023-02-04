@@ -110,6 +110,25 @@ export default class DoublyLinkedList<T> implements LinkedListOperations<T> {
     return false;
   }
 
+  #recursiveReverse(node: DoublyLinkedNode<T>) {
+    if (node === this.#sentinel) {
+      const swp = this.#sentinel.next;
+      this.#sentinel.next = this.#sentinel.prev;
+      this.#sentinel.prev = swp;
+      return this.#sentinel;
+    }
+
+    const prevNode = this.#recursiveReverse(node.next);
+    const reversedNextNode = node.prev;
+    node.next = reversedNextNode;
+    node.prev = prevNode;
+    return node;
+  }
+
+  reverse() {
+    this.#recursiveReverse(this.#sentinel.next);
+  }
+
   #removeValueRecursive(value: T, node: DoublyLinkedNode<T>) {
     if (this.#equals(node.value, value)) {
       // special case for when deleting a single item

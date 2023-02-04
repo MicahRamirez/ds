@@ -178,6 +178,21 @@ describe("DoublyLinkedList", () => {
     });
   });
 
+  describe("reverse", () => {
+    it("should reverse the ll", () => {
+      const ll = new DoublyLinkedList();
+      const numbers = [1, 2, 3, 4, 12, 3, 2];
+      numbers.forEach((val) => ll.add(val));
+
+      ll.reverse();
+      const reversed = ll.toArray();
+      numbers.reverse();
+      numbers.forEach((val, index) => {
+        expect(reversed[index]).toEqual(val);
+      });
+    });
+  });
+
   describe("toArray", () => {
     it("should transform the ll to an array", () => {
       const ll = new DoublyLinkedList();

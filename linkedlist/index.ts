@@ -4,6 +4,12 @@ import type { Comparator } from "../common";
 
 /**
  * SinglyLinkedList
+ * Operations TODO:
+ * reverse
+ * addAll
+ * removeValueRecursive
+ * add options to choose iter vs recursive
+ * refactor comparator ops under private methods
  */
 class LinkedList<T> implements Iterable<T> {
   private head: Node<T>;
@@ -16,8 +22,6 @@ class LinkedList<T> implements Iterable<T> {
     this.head = headNode;
     this.tail = headNode;
 
-    // TODO: Implement Comparator Function as instance var and use for equality comparisons
-    // on any comparisons of T
     this.#comparator = comparator;
   }
 

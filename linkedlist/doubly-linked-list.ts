@@ -6,6 +6,13 @@ type ImplementationOptions = {
   implementation: "iterative" | "recursive";
 };
 
+// Operations TODO:
+// addAll(ll: this): void;
+// removeIndex(index: number): T;
+// removeFirst(): T;
+// removeLast(): T;
+// iterability
+
 export default class DoublyLinkedList<T> implements LinkedListOperations<T> {
   #sentinel: DoublyLinkedNode<T> = new DoublyLinkedNode(null, null, null);
   #length: number;
@@ -154,7 +161,6 @@ export default class DoublyLinkedList<T> implements LinkedListOperations<T> {
   }
 
   // addAll(ll: this): void;
-  // removeValue(value: T): boolean;
   // removeIndex(index: number): T;
   // removeFirst(): T;
   // removeLast(): T;

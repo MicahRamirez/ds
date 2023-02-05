@@ -57,9 +57,6 @@ class Heap<T> {
       this.#container[childIndex] = newRoot;
       this.#heapify(childIndex);
     } else if (rightChild < newRoot && rightChild < leftChild) {
-      if (newRoot === 9) {
-        debugger;
-      }
       this.#container[index] = rightChild;
       this.#container[childIndex + 1] = newRoot;
       this.#heapify(childIndex + 1);

@@ -26,5 +26,15 @@ describe("Heap", () => {
       expect(nextMin).toEqual(1);
       expect(heap.peakContainer()).toEqual([2, 3]);
     });
+
+    it("more tests", () => {
+      const heap = new Heap();
+      const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+      const reversedNumbers = [...numbers].reverse();
+      reversedNumbers.forEach((number) => heap.insert(number));
+      numbers.forEach((number) => {
+        expect(heap.extractMin()).toEqual(number);
+      });
+    });
   });
 });

@@ -44,7 +44,7 @@ class Heap<T> {
 
   #heapify(index: number) {
     const childIndex = this.#child(index);
-    if (index > this.#length) {
+    if (childIndex > this.#length) {
       return;
     }
     const newRoot = this.#container[index];
@@ -57,6 +57,9 @@ class Heap<T> {
       this.#container[childIndex] = newRoot;
       this.#heapify(childIndex);
     } else if (rightChild < newRoot && rightChild < leftChild) {
+      if (newRoot === 9) {
+        debugger;
+      }
       this.#container[index] = rightChild;
       this.#container[childIndex + 1] = newRoot;
       this.#heapify(childIndex + 1);
@@ -105,6 +108,10 @@ class Heap<T> {
       container.push(this.#container[i]);
     }
     return container;
+  }
+
+  size() {
+    return this.#length;
   }
 }
 

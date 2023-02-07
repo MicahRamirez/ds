@@ -14,8 +14,7 @@
  *
  * Storage occurs ltr on positions 2^(l-1) to 2^l - 1
  *
- * extractMin
- * #initialize
+ * TODO: add comparator support for non numerical types
  */
 class Heap<T> {
   #container: Array<T>;

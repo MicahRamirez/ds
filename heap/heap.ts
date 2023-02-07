@@ -50,13 +50,13 @@ class Heap<T> {
     const newRoot = this.#container[index];
     const leftChild = this.#container[childIndex];
     const rightChild = this.#container[childIndex + 1];
-    if (newRoot < leftChild && newRoot < rightChild) {
+    if (newRoot <= leftChild && newRoot <= rightChild) {
       return;
-    } else if (leftChild < newRoot && leftChild < rightChild) {
+    } else if (leftChild <= newRoot && leftChild <= rightChild) {
       this.#container[index] = leftChild;
       this.#container[childIndex] = newRoot;
       this.#heapify(childIndex);
-    } else if (rightChild < newRoot && rightChild < leftChild) {
+    } else if (rightChild <= newRoot && rightChild <= leftChild) {
       this.#container[index] = rightChild;
       this.#container[childIndex + 1] = newRoot;
       this.#heapify(childIndex + 1);
@@ -78,7 +78,7 @@ class Heap<T> {
       return;
     }
     const parentValue = this.#container[parentIndex];
-    if (parentValue > swp) {
+    if (parentValue >= swp) {
       this.#container[index] = parentValue;
       this.#container[parentIndex] = swp;
       this.#bubbleUp(parentIndex);
@@ -94,7 +94,7 @@ class Heap<T> {
     if (this.#isRoot(parentValue)) {
       return true;
     }
-    if (parentValue > value) {
+    if (parentValue >= value) {
       // time to get bubbly
       this.#bubbleUp(insertionIndex);
     }
@@ -108,7 +108,7 @@ class Heap<T> {
   }
 
   size() {
-    return this.#length;
+    return this.#length + 1;
   }
 }
 

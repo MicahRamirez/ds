@@ -18,6 +18,33 @@ describe("Heap", () => {
       heap.insert(0);
       expect(heap.peakContainer()).toEqual([0, 1, 3, 2]);
     });
+
+    it("should support inserting complex types if given a comparator", () => {
+      type UserWithPriority = { userPriority: number; id: number };
+      const comparator = (userA: UserWithPriority, userB: UserWithPriority) => {
+        const result = userA.userPriority - userB.userPriority;
+        if (result === 0) {
+          return 0;
+        } else if (result > 0) {
+          return 1;
+        } else {
+          return -1;
+        }
+      };
+      const heap = new Heap(comparator);
+
+      heap.insert({ userPriority: 5, id: 1 });
+      heap.insert({ userPriority: 3, id: 1 });
+      heap.insert({ userPriority: 2, id: 1 });
+      heap.insert({ userPriority: 1, id: 1 });
+
+      expect(heap.peakContainer()).toEqual([
+        { userPriority: 1, id: 1 },
+        { userPriority: 2, id: 1 },
+        { userPriority: 3, id: 1 },
+        { userPriority: 5, id: 1 },
+      ]);
+    });
   });
 
   describe("extractMin", () => {

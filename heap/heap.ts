@@ -21,9 +21,18 @@ import type { Comparator } from "../common";
 class Heap<T> {
   #container: Array<T>;
   #length = -1;
+  #comparator: Comparator<T>;
 
   constructor(comparator?: Comparator<T>) {
     this.#container = [];
+    this.#comparator = comparator;
+  }
+
+  #isLessThanOrEqualTo(value, otherValue) {
+    if (this.#comparator) {
+      return this.#comparator(value, otherValue) === -1;
+    }
+    return value <= otherValue;
   }
 
   #rootValue() {
@@ -106,15 +115,24 @@ class Heap<T> {
     // base case 2: when the current root is less than its children the heapify op is over
     // if we assume that all previous subtrees maintained the dominates relationship then if fixed
     // at some level the lower subtrees must resolved as well.
-    if (newRoot <= leftChild && newRoot <= rightChild) {
+    if (
+      this.#isLessThanOrEqualTo(newRoot, leftChild) &&
+      this.#isLessThanOrEqualTo(newRoot, rightChild)
+    ) {
       return;
       // choosing the subtree that dominates the most
-    } else if (leftChild <= newRoot && leftChild <= rightChild) {
+    } else if (
+      this.#isLessThanOrEqualTo(leftChild, newRoot) &&
+      this.#isLessThanOrEqualTo(leftChild, rightChild)
+    ) {
       this.#container[index] = leftChild;
       this.#container[childIndex] = newRoot;
       this.#heapify(childIndex);
       // choosing the subtree that dominates the most
-    } else if (rightChild <= newRoot && rightChild <= leftChild) {
+    } else if (
+      this.#isLessThanOrEqualTo(rightChild, newRoot) &&
+      this.#isLessThanOrEqualTo(rightChild, leftChild)
+    ) {
       this.#container[index] = rightChild;
       this.#container[childIndex + 1] = newRoot;
       this.#heapify(childIndex + 1);
@@ -150,11 +168,12 @@ class Heap<T> {
       return;
     }
     const parent = this.#container[parentIndex];
-    if (parent >= child) {
-      this.#container[index] = parent;
-      this.#container[parentIndex] = child;
-      this.#bubbleUp(parentIndex);
+    if (this.#isLessThanOrEqualTo(parent, child)) {
+      return;
     }
+    this.#container[index] = parent;
+    this.#container[parentIndex] = child;
+    this.#bubbleUp(parentIndex);
   }
 
   /**
@@ -169,7 +188,7 @@ class Heap<T> {
     this.#length += 1;
     const parentIndex = this.#parent(insertionIndex);
     const parent = this.#container[parentIndex];
-    if (Boolean(parent) && parent >= value) {
+    if (Boolean(parent) && !this.#isLessThanOrEqualTo(parent, value)) {
       this.#bubbleUp(insertionIndex);
     }
   }

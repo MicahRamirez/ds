@@ -21,6 +21,12 @@ describe("Heap", () => {
   });
 
   describe("extractMin", () => {
+    it("should throw an error extracting min from an empty heap", () => {
+      const heap = new Heap();
+
+      expect(() => heap.extractMin()).toThrow(Error);
+    });
+
     it("should extract min and heapify correctly", () => {
       const heap = new Heap();
       heap.insert(1);

@@ -9,6 +9,18 @@ describe("Heap", () => {
     });
   });
 
+  describe("insertMany", () => {
+    it("should insert many and get the same result as the sequential insertions", () => {
+      const heap = new Heap();
+      heap.insertMany(1, 2, 3, 0);
+      const expectedResult = [0, 1, 2, 3];
+
+      expectedResult.forEach((value) => {
+        expect(value).toEqual(heap.extractMin());
+      });
+    });
+  });
+
   describe("insert", () => {
     it("should insert items in the expected indices in order to preserve space with sparse input", () => {
       const heap = new Heap();

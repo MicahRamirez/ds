@@ -32,7 +32,8 @@ class Heap<T> {
     if (this.#comparator) {
       return this.#comparator(value, otherValue) === -1;
     }
-    return value <= otherValue;
+    // value dominates indeterminate values
+    return otherValue === undefined || value <= otherValue;
   }
 
   #rootValue() {
@@ -207,6 +208,36 @@ class Heap<T> {
 
   size() {
     return this.#length + 1;
+  }
+  /**
+   * Use only when initializing...
+   *
+   * General insertion into the heap of N elements is n log n.
+   * Insert item0 * log n, ..., itemN * log n. Each insertion is worst case log n as it may have to
+   * bubble up all the way to the top.
+   *
+   * We can improve this by calling heapify from the end of the array
+   * Key points for why this is fast
+   * - only last insertion takes floor(log n) steps
+   * - most calls to heapify will be extremely small
+   * In a fully binary tree on n nodes, there are n/2 nodes that are leaves, n/4 nodes that are at
+   * height 1 n/8 nodes at height 2 ...
+   * In general, summation of ceil(n/h^(h+ 1)) * h from height = 0, to floor(log n)
+   * this series is not a geometric series but the dominator dominates the numerator so converges to linear
+   *
+   * Leaf nodes trivially dominate their non existent children
+   *
+   * @param elements many elements to be inserted into the heap
+   */
+  insertMany(...elements: T[]) {
+    for (let i = 0; i < elements.length; i++) {
+      this.#length += 1;
+      this.#container[i] = elements[i];
+    }
+
+    for (let i = this.#container.length - 1; i >= 0; i--) {
+      this.#heapify(i);
+    }
   }
 }
 

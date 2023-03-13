@@ -229,7 +229,7 @@ class Heap<T> {
    *
    * @param elements many elements to be inserted into the heap
    */
-  insertMany(...elements: T[]) {
+  insertMany(elements: Array<T>) {
     for (let i = 0; i < elements.length; i++) {
       this.#length += 1;
       this.#container[i] = elements[i];

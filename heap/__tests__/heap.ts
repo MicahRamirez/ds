@@ -12,7 +12,8 @@ describe("Heap", () => {
   describe("insertMany", () => {
     it("should insert many and get the same result as the sequential insertions", () => {
       const heap = new Heap();
-      heap.insertMany(1, 2, 3, 0);
+      const elements = [1, 2, 3, 0];
+      heap.insertMany(elements);
       const expectedResult = [0, 1, 2, 3];
 
       expectedResult.forEach((value) => {

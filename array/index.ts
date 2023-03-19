@@ -1,3 +1,8 @@
+enum SortDirection {
+  ASC,
+  DESC,
+}
+
 /**
  * NONSPARSE!
  */
@@ -222,6 +227,71 @@ class ArrayList<T> implements Iterable<T> {
     return this.container[index];
   }
 
+  #mergeSortComparison(a: any, b: any, direction: SortDirection) {
+    if (a === b) {
+      return 0;
+    } else if (a - b < 0) {
+      return direction === SortDirection.ASC ? 1 : -1;
+    } else {
+      return direction === SortDirection.ASC ? -1 : 1;
+    }
+  }
+
+  #mergeSortHelper(
+    startIndex: number,
+    endIndex: number,
+    direction: SortDirection,
+  ): Array<T> {
+    if (endIndex - startIndex === 0) {
+      return [this.container[startIndex]];
+    }
+    const middle = Math.floor((endIndex + startIndex) / 2);
+    const bufferOne = this.#mergeSortHelper(startIndex, middle, direction);
+    const bufferTwo = this.#mergeSortHelper(middle + 1, endIndex, direction);
+    const newBuffer = [];
+    let bufferOneIndex = 0;
+    let bufferTwoIndex = 0;
+    while (
+      bufferOneIndex < bufferOne.length &&
+      bufferTwoIndex < bufferTwo.length
+    ) {
+      const bufferOneElem = bufferOne[bufferOneIndex];
+      const bufferTwoElem = bufferTwo[bufferTwoIndex];
+      if (
+        this.#mergeSortComparison(bufferOneElem, bufferTwoElem, direction) === 0
+      ) {
+        newBuffer.push(bufferOneElem);
+        newBuffer.push(bufferTwoElem);
+        bufferOneIndex += 1;
+        bufferTwoIndex += 1;
+      } else if (
+        this.#mergeSortComparison(bufferOneElem, bufferTwoElem, direction) === 1
+      ) {
+        newBuffer.push(bufferOneElem);
+        bufferOneIndex += 1;
+      } else {
+        newBuffer.push(bufferTwoElem);
+        bufferTwoIndex += 1;
+      }
+    }
+
+    while (bufferOneIndex < bufferOne.length) {
+      newBuffer.push(bufferOne[bufferOneIndex]);
+      bufferOneIndex += 1;
+    }
+
+    while (bufferTwoIndex < bufferTwo.length) {
+      newBuffer.push(bufferTwo[bufferTwoIndex]);
+      bufferTwoIndex += 1;
+    }
+
+    return newBuffer;
+  }
+
+  mergeSort(direction: SortDirection = SortDirection.ASC) {
+    return this.#mergeSortHelper(0, this.length - 1, direction);
+  }
+
   set(index: number, value: T) {
     this._checkIndexValidity(index);
     this.container[index] = value;
@@ -247,6 +317,10 @@ class ArrayList<T> implements Iterable<T> {
 
   get length() {
     return this.size;
+  }
+
+  toNativeArray() {
+    return this.container;
   }
 }
 

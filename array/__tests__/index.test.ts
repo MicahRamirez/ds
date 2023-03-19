@@ -329,6 +329,17 @@ describe("ArrayList", () => {
 
   describe("clear #java AL", () => {});
 
+  describe("mergeSort", () => {
+    it("should sort primitive strings as expected", () => {
+      const al = new ArrayList<number>();
+      al.push(...[1, 0, 3, 4, 2]);
+
+      const result = al.mergeSort();
+
+      expect(result).toEqual([0, 1, 2, 3, 4]);
+    });
+  });
+
   describe("sort", () => {});
 
   describe("iterator protocol", () => {

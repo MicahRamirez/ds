@@ -159,7 +159,37 @@ export default class Graph implements GraphMethods {
 
   forEachNode: (Node) => void;
   forEachEdge: (edge: Edge) => void;
-  removeNode: (nodeId: string) => boolean;
+  /**
+   * this.e * other.e O(e^2)
+   * Simple worst case would be O(V^2)
+   * Non simple yikes
+   */
+  removeNode(nodeId: string): boolean {
+    if (!this.nodeMap.has(nodeId)) {
+      return false;
+    }
+    const nodeToRemove = this.nodeMap.get(nodeId);
+    let edgesRemoved = 0;
+    for (const otherNode of nodeToRemove.edges) {
+      // O(V^(loops)) if graph is complete and each connection has self loops
+      // linear for simple graphs but non simple would be NG
+      let removeIndex = otherNode.edges.findIndex(
+        (edges) => edges.id === nodeToRemove.id,
+      );
+      while (removeIndex !== -1) {
+        otherNode.edges.splice(removeIndex, 1);
+        removeIndex = otherNode.edges.findIndex(
+          (edges) => edges.id === nodeToRemove.id,
+        );
+      }
+      edgesRemoved += 1;
+    }
+    if (edgesRemoved > 0) {
+      this.nEdges -= edgesRemoved;
+    }
+    this.nVertices -= 1;
+    return true;
+  }
   removeEdge: (nodeIdX: string, nodeIdY: string) => boolean;
   clear: () => void;
 }

@@ -103,4 +103,37 @@ describe("Graph", () => {
       expect(nodeList[0].edges[0].id).toEqual("x");
     });
   });
+
+  describe("removeNode", () => {
+    it("should return false if the node does not exist in the graph", () => {
+      const g = new Graph();
+
+      expect(g.removeNode("yo")).toEqual(false);
+    });
+
+    it("Undirected: should remove a node and its incident edges", () => {
+      const g = new Graph();
+
+      g.addNode("yo");
+      g.addNode("brother");
+      g.addEdge("yo", "brother");
+
+      g.removeNode("yo");
+      expect(g.nEdges).toEqual(0);
+      expect(g.nVertices).toEqual(1);
+    });
+
+    it("Undirected: should remove loops if they exist in incident edges", () => {
+      const g = new Graph();
+
+      g.addNode("yo");
+      g.addNode("brother");
+      g.addEdge("yo", "brother");
+      g.addEdge("yo", "brother");
+      expect(g.nVertices).toEqual(2);
+      g.removeNode("yo");
+      expect(g.nVertices).toEqual(1);
+      expect(g.nEdges).toEqual(0);
+    });
+  });
 });

@@ -49,6 +49,7 @@ enum Direction {
 
 class Node {
   id: string;
+  // might want to make these maps...
   edges: Array<Node> = [];
   inEdges: Array<Node> = [];
   outEdges: Array<Node> = [];
@@ -116,7 +117,7 @@ export default class Graph implements GraphMethods {
   }
 
   nodesToArray() {
-    const nodeArray = [];
+    const nodeArray: Array<Node> = [];
     for (const [, node] of this.nodeMap.entries()) {
       nodeArray.push(node);
     }
@@ -130,7 +131,32 @@ export default class Graph implements GraphMethods {
     this.nodeMap.set(nodeId, new Node(nodeId));
     this.nVertices += 1;
   }
-  addEdge: (nodeIdX: string, nodeIdY: string) => void;
+
+  addEdge(nodeIdX: string, nodeIdY: string) {
+    if (!this.nodeMap.has(nodeIdX) || !this.nodeMap.has(nodeIdY)) {
+      throw new Error("Cannot add edges to vertices that DNE");
+    }
+    const nodeX = this.nodeMap.get(nodeIdX);
+    const nodeY = this.nodeMap.get(nodeIdY);
+
+    if (!this.directed) {
+      // self loop {x,x}
+      if (nodeX === nodeY) {
+        nodeX.edges.push(nodeY);
+      } else {
+        // for now we dont need checks for existence on the edges we add as making a graph non simple is fine
+        // TODO/QUESTION: Do we need to keep labels for edges? This would come into play when we are dealing
+        // with non simple graphs. If I say remove (x,y) in a simple undirected graph does that mean I removal all
+        // edges (x,y) or just one ? Not sure on the expected behavior...
+        nodeX.edges.push(nodeY);
+        nodeY.edges.push(nodeX);
+      }
+
+      // we add two edges but in an undirected graph x,y is the same as y,x because it is set like {x,y} <=> {y,x}
+      this.nEdges += 1;
+    }
+  }
+
   forEachNode: (Node) => void;
   forEachEdge: (edge: Edge) => void;
   removeNode: (nodeId: string) => boolean;

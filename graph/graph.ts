@@ -47,11 +47,14 @@ enum Direction {
   undirected = "undirected",
 }
 
-interface Node {
+class Node {
   id: string;
-  edges: Array<Node>;
-  inEdges: Array<Node>;
-  outEdges: Array<Node>;
+  edges: Array<Node> = [];
+  inEdges: Array<Node> = [];
+  outEdges: Array<Node> = [];
+  constructor(id: string) {
+    this.id = id;
+  }
 }
 
 /**
@@ -95,20 +98,38 @@ interface GraphMethods {
   clear: () => void;
 }
 
-class Graph implements GraphMethods {
+export default class Graph implements GraphMethods {
   /**
    * K is some unique identifier for the node
    * This will give us constant time access when accessing known nodes
    */
-  nodeMap: Map<string, Node>;
+  nodeMap: Map<string, Node> = new Map();
   nVertices: number = 0;
   nEdges: number = 0;
-  directed: boolean = false;
-
-  constructor(isDirected?: boolean) {
+  directed: boolean;
+  constructor(isDirected: boolean = false) {
     this.directed = isDirected;
   }
-  addNode: (nodeId: string) => void;
+
+  hasNode(nodeId: string) {
+    return this.nodeMap.has(nodeId);
+  }
+
+  nodesToArray() {
+    const nodeArray = [];
+    for (const [, node] of this.nodeMap.entries()) {
+      nodeArray.push(node);
+    }
+    return nodeArray;
+  }
+
+  addNode(nodeId: string) {
+    if (this.hasNode(nodeId)) {
+      throw new Error("Node Already Exists!");
+    }
+    this.nodeMap.set(nodeId, new Node(nodeId));
+    this.nVertices += 1;
+  }
   addEdge: (nodeIdX: string, nodeIdY: string) => void;
   forEachNode: (Node) => void;
   forEachEdge: (edge: Edge) => void;

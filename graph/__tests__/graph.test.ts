@@ -136,4 +136,27 @@ describe("Graph", () => {
       expect(g.nEdges).toEqual(0);
     });
   });
+
+  describe("removeEdge", () => {
+    it("should return true when removing an existing edge between a nodeX and nodeY", () => {
+      const g = new Graph();
+
+      const nodeX = "yo";
+      const nodeY = "brother";
+      g.addNode(nodeX);
+      g.addNode(nodeY);
+      g.addEdge(nodeX, nodeY);
+      expect(g.nEdges).toEqual(1);
+
+      expect(g.removeEdge(nodeX, nodeY)).toEqual(true);
+      expect(g.nEdges).toEqual(0);
+      expect(g.removeEdge(nodeX, nodeY)).toEqual(false);
+    });
+
+    it("should return false when removing an edge that does not exist", () => {
+      const g = new Graph();
+
+      expect(g.removeEdge("random", "edge")).toEqual(false);
+    });
+  });
 });

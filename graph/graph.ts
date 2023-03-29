@@ -160,9 +160,10 @@ export default class Graph implements GraphMethods {
   forEachNode: (Node) => void;
   forEachEdge: (edge: Edge) => void;
   /**
-   * this.e * other.e O(e^2)
-   * Simple worst case would be O(V^2)
-   * Non simple yikes
+   * thisVertex.e * otherVertex.e
+   * for every edge in nodeId edges find this node in their adjacency list and remove
+   * When graph is simple: O(v^2)
+   * When graph is non simple: O(v * max(k.edges.length)) where k is some vertex
    */
   removeNode(nodeId: string): boolean {
     if (!this.nodeMap.has(nodeId)) {
@@ -190,6 +191,29 @@ export default class Graph implements GraphMethods {
     this.nVertices -= 1;
     return true;
   }
-  removeEdge: (nodeIdX: string, nodeIdY: string) => boolean;
+
+  removeEdge(nodeIdX: string, nodeIdY: string) {
+    const nodeX = this.nodeMap.get(nodeIdX);
+    const nodeY = this.nodeMap.get(nodeIdY);
+    if (!nodeX || !nodeY) {
+      return false;
+    }
+
+    const nodeYIndex = nodeX.edges.findIndex((node) => node.id === nodeY.id);
+    const nodeXIndex = nodeY.edges.findIndex((node) => node.id === nodeX.id);
+
+    if (nodeYIndex !== -1 && nodeXIndex !== -1) {
+      nodeX.edges.splice(nodeYIndex, 1);
+      nodeY.edges.splice(nodeXIndex, 1);
+
+      this.nEdges -= 1;
+      return true;
+    } else if (nodeYIndex === -1 && nodeXIndex === -1) {
+      return false;
+    } else {
+      throw new Error("Edges either need to both exist or not exist.");
+    }
+  }
+
   clear: () => void;
 }

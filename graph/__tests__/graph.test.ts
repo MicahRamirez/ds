@@ -100,7 +100,7 @@ describe("Graph", () => {
       expect(g.nEdges).toEqual(1);
       const nodeList = g.nodesToArray();
       expect(nodeList[0].edges).toHaveLength(1);
-      expect(nodeList[0].edges[0].id).toEqual("x");
+      expect(nodeList[0].edges[0].node.id).toEqual("x");
     });
   });
 

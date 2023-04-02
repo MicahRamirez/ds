@@ -53,6 +53,16 @@ class Node {
   constructor(id: string) {
     this.id = id;
   }
+
+  getEdge(id: string): Node {
+    const edgeNode = this.edges.find((node) => node.id === id);
+    return edgeNode ? edgeNode : null;
+  }
+
+  removeEdge(id: string): boolean {
+    const edge = this.edges.findIndex((edges) => edges.id === id);
+    return this.edges.splice(edge, 1).length === 1;
+  }
 }
 
 /**
@@ -171,14 +181,9 @@ export default class Graph implements GraphMethods {
     for (const otherNode of nodeToRemove.edges) {
       // O(V^(loops)) if graph is complete and each connection has self loops
       // linear for simple graphs but non simple would be NG
-      let removeIndex = otherNode.edges.findIndex(
-        (edges) => edges.id === nodeToRemove.id,
-      );
-      while (removeIndex !== -1) {
-        otherNode.edges.splice(removeIndex, 1);
-        removeIndex = otherNode.edges.findIndex(
-          (edges) => edges.id === nodeToRemove.id,
-        );
+      let hasEdgesToRemove = otherNode.removeEdge(nodeToRemove.id);
+      while (hasEdgesToRemove) {
+        hasEdgesToRemove = otherNode.removeEdge(nodeToRemove.id);
       }
       edgesRemoved += 1;
     }

@@ -159,4 +159,31 @@ describe("Graph", () => {
       expect(g.removeEdge("random", "edge")).toEqual(false);
     });
   });
+
+  describe("clear", () => {
+    it("should remove all edges and vertices", () => {
+      const g = new Graph();
+      const nodesAndEdges: Array<[string, Array<string>]> = [
+        ["nodeA", ["nodeB", "nodeC"]],
+        ["nodeB", ["nodeC"]],
+        ["nodeC", []],
+      ];
+      for (const [vertex] of nodesAndEdges) {
+        g.addNode(vertex);
+      }
+      for (const [vertex, edges] of nodesAndEdges) {
+        for (const edge of edges) {
+          g.addEdge(vertex, edge);
+        }
+      }
+
+      expect(g.nVertices).toEqual(3);
+      expect(g.nEdges).toEqual(3);
+
+      g.clear();
+
+      expect(g.nVertices).toEqual(0);
+      expect(g.nEdges).toEqual(0);
+    });
+  });
 });

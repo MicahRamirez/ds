@@ -215,5 +215,9 @@ export default class Graph implements GraphMethods {
     }
   }
 
-  clear: () => void;
+  clear() {
+    this.nodeMap.clear();
+    this.nVertices = 0;
+    this.nEdges = 0;
+  }
 }

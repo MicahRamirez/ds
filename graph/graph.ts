@@ -63,6 +63,14 @@ class Node {
     const edge = this.edges.findIndex((edges) => edges.id === id);
     return this.edges.splice(edge, 1).length === 1;
   }
+
+  addEdge(node: Node) {
+    this.edges.push(node);
+  }
+
+  listEdges() {
+    return this.edges;
+  }
 }
 
 /**
@@ -149,14 +157,14 @@ export default class Graph implements GraphMethods {
     if (!this.directed) {
       // self loop {x,x}
       if (nodeX === nodeY) {
-        nodeX.edges.push(nodeY);
+        nodeX.addEdge(nodeY);
       } else {
         // for now we dont need checks for existence on the edges we add as making a graph non simple is fine
         // TODO/QUESTION: Do we need to keep labels for edges? This would come into play when we are dealing
         // with non simple graphs. If I say remove (x,y) in a simple undirected graph does that mean I removal all
         // edges (x,y) or just one ? Not sure on the expected behavior...
-        nodeX.edges.push(nodeY);
-        nodeY.edges.push(nodeX);
+        nodeX.addEdge(nodeY);
+        nodeY.addEdge(nodeX);
       }
 
       // we add two edges but in an undirected graph x,y is the same as y,x because it is set like {x,y} <=> {y,x}
@@ -178,7 +186,7 @@ export default class Graph implements GraphMethods {
     }
     const nodeToRemove = this.nodeMap.get(nodeId);
     let edgesRemoved = 0;
-    for (const otherNode of nodeToRemove.edges) {
+    for (const otherNode of nodeToRemove.listEdges()) {
       // O(V^(loops)) if graph is complete and each connection has self loops
       // linear for simple graphs but non simple would be NG
       let hasEdgesToRemove = otherNode.removeEdge(nodeToRemove.id);
@@ -201,16 +209,13 @@ export default class Graph implements GraphMethods {
       return false;
     }
 
-    const nodeYIndex = nodeX.edges.findIndex((node) => node.id === nodeY.id);
-    const nodeXIndex = nodeY.edges.findIndex((node) => node.id === nodeX.id);
+    const isEdgeYRemoved = nodeX.removeEdge(nodeY.id);
+    const isEdgeXRemoved = nodeY.removeEdge(nodeX.id);
 
-    if (nodeYIndex !== -1 && nodeXIndex !== -1) {
-      nodeX.edges.splice(nodeYIndex, 1);
-      nodeY.edges.splice(nodeXIndex, 1);
-
+    if (isEdgeYRemoved && isEdgeXRemoved) {
       this.nEdges -= 1;
       return true;
-    } else if (nodeYIndex === -1 && nodeXIndex === -1) {
+    } else if (!(isEdgeYRemoved && isEdgeXRemoved)) {
       return false;
     } else {
       throw new Error("Edges either need to both exist or not exist.");

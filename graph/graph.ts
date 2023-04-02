@@ -49,23 +49,24 @@ enum Direction {
 
 class Node {
   id: string;
-  edges: Array<Node> = [];
+  edges: Array<Edge> = [];
+  weight: number;
   constructor(id: string) {
     this.id = id;
   }
 
-  getEdge(id: string): Node {
-    const edgeNode = this.edges.find((node) => node.id === id);
+  getEdge(id: string): Edge {
+    const edgeNode = this.edges.find(({ node }) => node.id === id);
     return edgeNode ? edgeNode : null;
   }
 
   removeEdge(id: string): boolean {
-    const edge = this.edges.findIndex((edges) => edges.id === id);
+    const edge = this.edges.findIndex(({ node }) => node.id === id);
     return this.edges.splice(edge, 1).length === 1;
   }
 
-  addEdge(node: Node) {
-    this.edges.push(node);
+  addEdge(node: Node, { weight }: Pick<Edge, "weight"> = { weight: 0 }) {
+    this.edges.push({ node, weight, direction: Direction.undirected });
   }
 
   listEdges() {
@@ -80,8 +81,8 @@ class Node {
  */
 interface Edge {
   direction: Direction;
-  nodeX: Node;
-  nodeY: Node;
+  node: Node;
+  weight: number;
 }
 
 interface GraphMethods {
@@ -186,7 +187,7 @@ export default class Graph implements GraphMethods {
     }
     const nodeToRemove = this.nodeMap.get(nodeId);
     let edgesRemoved = 0;
-    for (const otherNode of nodeToRemove.listEdges()) {
+    for (const { node: otherNode } of nodeToRemove.listEdges()) {
       // O(V^(loops)) if graph is complete and each connection has self loops
       // linear for simple graphs but non simple would be NG
       let hasEdgesToRemove = otherNode.removeEdge(nodeToRemove.id);

@@ -49,10 +49,7 @@ enum Direction {
 
 class Node {
   id: string;
-  // might want to make these maps...
   edges: Array<Node> = [];
-  inEdges: Array<Node> = [];
-  outEdges: Array<Node> = [];
   constructor(id: string) {
     this.id = id;
   }

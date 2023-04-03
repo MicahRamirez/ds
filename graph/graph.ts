@@ -47,7 +47,7 @@ enum Direction {
   undirected = "undirected",
 }
 
-class Node {
+export class Node {
   id: string;
   edges: Array<Edge> = [];
   weight: number;
@@ -79,7 +79,7 @@ class Node {
  * Represents edge {x,y} from the set of Undirected Edges in Graph G
  * Represents edge (x,y) from the set of Directed Edges in Graph G
  */
-interface Edge {
+export interface Edge {
   direction: Direction;
   node: Node;
   weight: number;
@@ -227,5 +227,8 @@ export default class Graph implements GraphMethods {
     this.nodeMap.clear();
     this.nVertices = 0;
     this.nEdges = 0;
+  }
+  [Symbol.iterator]() {
+    return this.nodeMap.values();
   }
 }

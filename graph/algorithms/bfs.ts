@@ -12,6 +12,9 @@ type BFSOptions = {
 };
 type PathTree = Record<string, Node | null>;
 
+/**
+ * TODO move refactor to "traversals" module
+ */
 function BFS(g: Graph, start: string, options?: BFSOptions) {
   const state: Record<string, DiscoveryState> = {};
   const pathTree: Record<string, Node | null> = {};

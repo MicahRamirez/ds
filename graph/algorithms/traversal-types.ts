@@ -10,3 +10,9 @@ export type BFSOptions = {
   processEdge: (e: Edge) => void;
 };
 export type PathTree = Record<string, Node | null>;
+export type NodeState = Record<string, DiscoveryState>;
+export type ProcessEdgeOptions = {
+  edgeState: DiscoveryState;
+  pathTree: Record<string, Node>;
+  from: string;
+};

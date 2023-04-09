@@ -15,7 +15,7 @@ type PathTree = Record<string, Node | null>;
 /**
  * TODO move refactor to "traversals" module
  */
-function BFS(g: Graph, start: string, options?: BFSOptions) {
+export function bfs(g: Graph, start: string, options?: BFSOptions) {
   const state: Record<string, DiscoveryState> = {};
   const pathTree: Record<string, Node | null> = {};
   const queue = new LinkedQueue<Node>();
@@ -50,7 +50,7 @@ function BFS(g: Graph, start: string, options?: BFSOptions) {
 }
 
 export function shortestUnweightedPath(g: Graph, x: string, y: string) {
-  const pathTree = BFS(g, x);
+  const pathTree = bfs(g, x);
   if (pathTree[x] !== null) {
     throw new Error(
       "shortest unweighted path from x to y must be anchored at x",

@@ -60,13 +60,24 @@ export class Node {
     return edgeNode ? edgeNode : null;
   }
 
-  removeEdge(id: string): boolean {
-    const edge = this.edges.findIndex(({ node }) => node.id === id);
-    return this.edges.splice(edge, 1).length === 1;
+  removeEdge(
+    id: string,
+    directionParam: Direction | undefined = Direction.undirected,
+  ): boolean {
+    const edge = this.edges.findIndex(
+      ({ node, direction }) => direction === directionParam && node.id === id,
+    );
+    return edge === -1 ? false : this.edges.splice(edge, 1).length === 1;
   }
 
-  addEdge(node: Node, { weight }: Pick<Edge, "weight"> = { weight: 0 }) {
-    this.edges.push({ node, weight, direction: Direction.undirected });
+  addEdge(
+    node: Node,
+    { weight, direction }: Pick<Edge, "weight" | "direction"> = {
+      weight: 0,
+      direction: Direction.undirected,
+    },
+  ) {
+    this.edges.push({ node, weight, direction });
   }
 
   listEdges() {
@@ -132,6 +143,10 @@ export default class Graph implements GraphMethods {
     return this.nodeMap.has(nodeId);
   }
 
+  getNode(nodeId: string) {
+    return this.nodeMap.get(nodeId);
+  }
+
   nodesToArray() {
     const nodeArray: Array<Node> = [];
     for (const [, node] of this.nodeMap.entries()) {
@@ -169,8 +184,11 @@ export default class Graph implements GraphMethods {
       }
 
       // we add two edges but in an undirected graph x,y is the same as y,x because it is set like {x,y} <=> {y,x}
-      this.nEdges += 1;
+    } else {
+      nodeX.addEdge(nodeY, { direction: Direction.out, weight: 0 });
+      nodeY.addEdge(nodeX, { direction: Direction.in, weight: 0 });
     }
+    this.nEdges += 1;
   }
 
   forEachNode: (Node) => void;
@@ -210,8 +228,10 @@ export default class Graph implements GraphMethods {
       return false;
     }
 
-    const isEdgeYRemoved = nodeX.removeEdge(nodeY.id);
-    const isEdgeXRemoved = nodeY.removeEdge(nodeX.id);
+    const xDirection = this.directed ? Direction.out : undefined;
+    const yDirection = this.directed ? Direction.in : undefined;
+    const isEdgeYRemoved = nodeX.removeEdge(nodeY.id, xDirection);
+    const isEdgeXRemoved = nodeY.removeEdge(nodeX.id, yDirection);
 
     if (isEdgeYRemoved && isEdgeXRemoved) {
       this.nEdges -= 1;

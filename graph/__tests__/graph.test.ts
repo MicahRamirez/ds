@@ -1,4 +1,12 @@
 import Graph from "../graph";
+import type { Edge } from "../graph";
+
+function sumEdgeDegree(direction: "in" | "out") {
+  return function (acc: number, edge: Edge) {
+    const degree = edge.direction === direction ? 1 : 0;
+    return acc + degree;
+  };
+}
 
 describe("Graph", () => {
   describe("constructor", () => {
@@ -102,6 +110,25 @@ describe("Graph", () => {
       expect(nodeList[0].edges).toHaveLength(1);
       expect(nodeList[0].edges[0].node.id).toEqual("x");
     });
+
+    it("Directed: should add an edge with direction from x to y", () => {
+      const g = new Graph(true);
+      const nodes = ["x", "y"];
+      const directedEdges = [["x", "y"]];
+      nodes.forEach((node) => g.addNode(node));
+      directedEdges.forEach(([x, y]) => {
+        g.addEdge(x, y);
+      });
+
+      expect(g.nEdges).toEqual(1);
+      const x = g.getNode("x");
+      const xEdges = x.listEdges();
+      expect(xEdges.reduce<number>(sumEdgeDegree("in"), 0)).toEqual(0);
+      expect(xEdges.reduce<number>(sumEdgeDegree("out"), 0)).toEqual(1);
+      const yEdges = g.getNode("y").listEdges();
+      expect(yEdges.reduce<number>(sumEdgeDegree("in"), 0)).toEqual(1);
+      expect(yEdges.reduce<number>(sumEdgeDegree("out"), 0)).toEqual(0);
+    });
   });
 
   describe("removeNode", () => {
@@ -135,6 +162,25 @@ describe("Graph", () => {
       expect(g.nVertices).toEqual(1);
       expect(g.nEdges).toEqual(0);
     });
+
+    it("Directed: should add an edge with direction from x to y", () => {
+      const g = new Graph(true);
+      const nodes = ["x", "y", "z"];
+      const directedEdges = [
+        ["x", "y"],
+        ["y", "z"],
+        ["z", "y"],
+        ["z", "x"],
+      ];
+      nodes.forEach((node) => g.addNode(node));
+      directedEdges.forEach(([x, y]) => {
+        g.addEdge(x, y);
+      });
+
+      expect(g.nEdges).toEqual(4);
+      g.removeNode("y");
+      expect(g.nEdges).toEqual(1);
+    });
   });
 
   describe("removeEdge", () => {
@@ -158,6 +204,21 @@ describe("Graph", () => {
 
       expect(g.removeEdge("random", "edge")).toEqual(false);
     });
+
+    it("Directed: should return false when removing an edge that does not exist in the x,y direction", () => {
+      const g = new Graph(true);
+      const nodes = ["x", "y"];
+      const directedEdges = [["y", "x"]];
+      nodes.forEach((node) => g.addNode(node));
+      directedEdges.forEach(([x, y]) => {
+        g.addEdge(x, y);
+      });
+
+      expect(g.nEdges).toEqual(1);
+      expect(g.removeEdge("x", "y")).toEqual(false);
+      expect(g.nEdges).toEqual(1);
+    });
+    it("Directed: should return true when removing an edge that does exist in the x,y direction", () => {});
   });
 
   describe("clear", () => {

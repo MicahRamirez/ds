@@ -1,6 +1,7 @@
 import Graph, { Node, Edge } from "../graph";
 import { dfs } from "./dfs";
 import type { ProcessEdgeOptions } from "./traversal-types";
+import { EdgeType } from "./traversal-types";
 
 /**
  * Any "back" edge represents a cycle so we just need to use bfs. Check whether in
@@ -18,7 +19,7 @@ export function hasCycle(g: Graph) {
     visitedNodesSet.add(vertex.id);
   };
   const processEdge = (edge: Edge, options: ProcessEdgeOptions) => {
-    if (!options) {
+    if (!options || options.edgeType === EdgeType.tree) {
       return;
     }
 
@@ -26,7 +27,9 @@ export function hasCycle(g: Graph) {
     // pathTree should represent the node in the DFS tree
     // when we process an edge u to v and u is not the direct parent of v then
     // we must be on a back edge which denotes a cycle
-    if (options.pathTree[options.from].id !== edge.node.id) {
+    const parent = options.pathTree[options.from]?.id;
+
+    if (parent && parent !== edge.node.id) {
       hasCycle = true;
     }
   };
@@ -35,7 +38,10 @@ export function hasCycle(g: Graph) {
       return true;
     }
     if (!visitedNodesSet.has(vertex.id)) {
-      dfs(g, vertex.id, { processEdge, processVertexLate: processVertex });
+      dfs(g, vertex.id, {
+        processEdge,
+        processVertexLate: processVertex,
+      });
     }
   }
   return hasCycle;

@@ -80,8 +80,10 @@ export class Node {
     this.edges.push({ node, weight, direction });
   }
 
-  listEdges() {
-    return this.edges;
+  listEdges(isDirected: boolean = false) {
+    return isDirected
+      ? this.edges.filter((edge) => edge.direction === Direction.out)
+      : this.edges;
   }
 }
 
@@ -189,6 +191,9 @@ export default class Graph implements GraphMethods {
       nodeY.addEdge(nodeX, { direction: Direction.in, weight: 0 });
     }
     this.nEdges += 1;
+  }
+  isDirected() {
+    return this.directed;
   }
 
   forEachNode: (Node) => void;

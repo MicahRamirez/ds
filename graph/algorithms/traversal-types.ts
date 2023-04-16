@@ -5,6 +5,10 @@ export enum DiscoveryState {
   discovered = "discovered",
   processed = "processed",
 }
+export enum EdgeType {
+  tree = "Tree",
+  back = "Back",
+}
 export type BFSOptions = {
   processVertex: (v: Node) => void;
   processEdge: (e: Edge) => void;
@@ -15,4 +19,5 @@ export type ProcessEdgeOptions = {
   edgeState: DiscoveryState;
   pathTree: Record<string, Node>;
   from: string;
+  edgeType: EdgeType;
 };

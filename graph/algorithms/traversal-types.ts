@@ -8,6 +8,8 @@ export enum DiscoveryState {
 export enum EdgeType {
   tree = "Tree",
   back = "Back",
+  cross = "Cross",
+  forward = "Forward",
 }
 export type BFSOptions = {
   processVertex: (v: Node) => void;
